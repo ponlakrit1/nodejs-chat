@@ -11,12 +11,27 @@
     <script>
         $(()=>{
             var socket = io();
-            socket.emit('chat demo', 'chat deme detail');
+            // socket.emit('chat demo', 'chat deme detail');
+
+            $('form').submit(()=>{
+                socket.emit('chat demo', $('#m').val());
+                $('#m').val('');
+                return false;
+            })
+
+            socket.on('chat demo', (msg)=>{
+                $('#messages').append($('<li>').text(msg));
+            });
         });
     </script>
 
 </head>
 <body>
-    Index file
+
+    <ul id="messages"></ul>
+    <form action="">
+        <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+
 </body>
 </html>

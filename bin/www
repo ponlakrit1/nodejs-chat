@@ -26,8 +26,12 @@ var io = require('socket.io')(server);
 io.on('connection', (socker)=>{
   console.log("connected");
 
+  // listen
   socker.on('chat demo', (msg)=>{
     console.log(msg)
+
+    // reply
+    io.emit('chat demo', msg);
   });
 });
 

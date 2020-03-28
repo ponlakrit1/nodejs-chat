@@ -25,7 +25,6 @@ var server = http.createServer(app);
 // socket
 var io = require('socket.io')(server);
 io.on('connection', (socket)=>{
-  console.log("connected");
 
   // check chat room
   socket.on("room", (room) => {
@@ -45,7 +44,7 @@ io.on('connection', (socket)=>{
       insert new message to chat room
     */
 
-    io.emit('message', msg);
+    io.emit(msg.chatroom, msg);
   });
 
   // connection.query("SELECT * FROM user_system WHERE USERNAME = 'tine'", function (err, result, fields) {

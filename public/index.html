@@ -9,24 +9,36 @@
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 
     <script>
+        var chatroom = "testroom";
+
         $(()=>{
             var socket = io();
-            socket.emit('join', 'tine_ton');
+            socket.emit('room', 'main_test');
 
             $('form').submit(()=>{
 
                 var sendObj = {
-                    username: $('#user').val(),
-                    message: $('#m').val()
+                    chatroom: $('#chatroom').val(),
+                    username: $('#username').val(),
+                    message: $('#msg').val()
                 }
 
+                // send by message
                 socket.emit('message', sendObj);
-                $('#m').val('')
-                return false;
-            })
+                $('#msg').val('')
 
-            socket.on('chat demo', (msg)=>{
+                return false;
+            });
+
+            // receive by chat room name
+            socket.on(chatroom, (msg)=>{
                 $('#messages').append($('<li>').text(msg.username + " : " +msg.message));
+            });
+        });
+
+        $(function(){
+            $('#chatroom').change(function(){
+                chatroom = $(this).val(); 
             });
         });
     </script>
@@ -36,10 +48,10 @@
 
     <ul id="messages"></ul>
     <form action="">
-        From : <input id="user" autocomplete="off" /> To : <input id="receive" autocomplete="off" />
+        Chat room : <input id="chatroom" autocomplete="off" /> Username : <input id="username" autocomplete="off" />
         <br/>
         <br/>
-        <input id="m" autocomplete="off" /><button>Send</button>
+        <input id="msg" autocomplete="off" /><button>Send</button>
     </form>
 
 </body>

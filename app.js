@@ -4,11 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
-// socket.io
-var mysql = require('mysql');
+var socketRouter = require('./routes/socket');
 
 var app = express();
 
@@ -23,24 +19,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // router
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
-// mySQL
-var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : '',
-  database : 'demo'
-});
-// connection.connect(function(err) {
-//     if (err) throw err
-//     console.log('You are now connected with mysql database...')
-// });
-
-app.get('/socket', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
-});
+app.use('/socket', socketRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

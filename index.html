@@ -11,16 +11,21 @@
     <script>
         $(()=>{
             var socket = io();
-            // socket.emit('chat demo', 'chat deme detail');
 
             $('form').submit(()=>{
-                socket.emit('chat demo', $('#m').val());
-                $('#m').val('');
+
+                var sendObj = {
+                    username: $('#user').val(),
+                    message: $('#m').val()
+                }
+
+                socket.emit('chat demo', sendObj);
+                $('#m').val('')
                 return false;
             })
 
             socket.on('chat demo', (msg)=>{
-                $('#messages').append($('<li>').text(msg));
+                $('#messages').append($('<li>').text(msg.username + " : " +msg.message));
             });
         });
     </script>
@@ -30,6 +35,9 @@
 
     <ul id="messages"></ul>
     <form action="">
+        User : <input id="user" autocomplete="off" />
+        <br/>
+        <br/>
         <input id="m" autocomplete="off" /><button>Send</button>
     </form>
 

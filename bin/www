@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('chat-app-nodejs2:server');
 var http = require('http');
+var connection = require('../conn');
 
 /**
  * Get port from environment and store in Express.
@@ -23,16 +24,34 @@ var server = http.createServer(app);
 
 // socket
 var io = require('socket.io')(server);
-io.on('connection', (socker)=>{
+io.on('connection', (socket)=>{
   console.log("connected");
 
-  // listen
-  socker.on('chat demo', (msg)=>{
-    console.log(msg)
+  // check chat room
+  socket.on("room", (room) => {
+    socket.join(room);
 
-    // reply
-    io.emit('chat demo', msg);
+    /* 
+      find chat room
+      if(!exits){
+        insert new chat room
+      }
+    */
   });
+
+  // listen
+  socket.on('message', (msg)=>{
+    /*
+      insert new message to chat room
+    */
+
+    io.emit('message', msg);
+  });
+
+  // connection.query("SELECT * FROM user_system WHERE USERNAME = 'tine'", function (err, result, fields) {
+  //   if (err) throw err;
+  //   console.log(result);
+  // });
 });
 
 /**

@@ -11,6 +11,7 @@
     <script>
         $(()=>{
             var socket = io();
+            socket.emit('join', 'tine_ton');
 
             $('form').submit(()=>{
 
@@ -19,7 +20,7 @@
                     message: $('#m').val()
                 }
 
-                socket.emit('chat demo', sendObj);
+                socket.emit('message', sendObj);
                 $('#m').val('')
                 return false;
             })
@@ -35,7 +36,7 @@
 
     <ul id="messages"></ul>
     <form action="">
-        User : <input id="user" autocomplete="off" />
+        From : <input id="user" autocomplete="off" /> To : <input id="receive" autocomplete="off" />
         <br/>
         <br/>
         <input id="m" autocomplete="off" /><button>Send</button>

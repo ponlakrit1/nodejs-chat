@@ -26,31 +26,19 @@ var server = http.createServer(app);
 var io = require('socket.io')(server);
 io.on('connection', (socket)=>{
 
+  console.log("connect with = "+socket.id);
+
   // check chat room
   socket.on("room", (room) => {
     socket.join(room);
-
-    /* 
-      find chat room
-      if(!exits){
-        insert new chat room
-      }
-    */
   });
 
   // listen
   socket.on('message', (msg)=>{
-    /*
-      insert new message to chat room
-    */
+    console.log(msg);
 
     io.emit(msg.chatroom, msg);
   });
-
-  // connection.query("SELECT * FROM user_system WHERE USERNAME = 'tine'", function (err, result, fields) {
-  //   if (err) throw err;
-  //   console.log(result);
-  // });
 });
 
 /**

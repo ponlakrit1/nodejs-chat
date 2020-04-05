@@ -16,11 +16,11 @@ router.get('/:userId', function(req, res, next) {
         // select result
         connection.query("SELECT * FROM user_system WHERE USERNAME = '"+req.params.userId+"'", function (err, result, fields) {
           if(err) throw err;
-          res.send(result);
+          res.json(result);
         });
       });
     } else {
-      res.send(result);
+      res.json(result);
     }
 
   });

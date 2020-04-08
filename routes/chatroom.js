@@ -2,6 +2,14 @@ var express = require('express');
 var router = express.Router();
 var connection = require('../conn');
 
+// Find and chatroom
+router.get('/:chatFrom', function(req, res, next) {
+  connection.query("SELECT * FROM chat_room WHERE chat_from = '"+req.params.chatFrom+"' OR chat_to = '"+req.params.chatFrom+"'", function (err, result, fields) {
+    if (err) throw err;
+    res.json(result);
+  });
+});
+
 // Find and create chat room
 router.get('/:chatFrom/:chatTo', function(req, res, next) {
   var params1 = req.params.chatFrom+"_"+req.params.chatTo;

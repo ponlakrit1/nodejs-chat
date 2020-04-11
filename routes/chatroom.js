@@ -4,7 +4,12 @@ var connection = require('../conn');
 
 // Find and chatroom
 router.get('/:chatFrom', function(req, res, next) {
-  connection.query("SELECT * FROM chat_room WHERE chat_from = '"+req.params.chatFrom+"' OR chat_to = '"+req.params.chatFrom+"'", function (err, result, fields) {
+  var query = "SELECT * FROM chat_room r " +
+              "RIGHT JOIN message m ON r.chat_no = m.chat_no " +
+              "WHERE r.chat_from = '" + req.params.chatFrom + "' " +
+              "OR r.chat_to = '" + req.params.chatFrom + "' ";
+
+  connection.query(query, function (err, result, fields) {
     if (err) throw err;
     res.json(result);
   });

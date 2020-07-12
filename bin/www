@@ -22,11 +22,15 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
+// Status
+let STATUS_MESSAGE_NOT_SENT = 10001;
+let STATUS_MESSAGE_SENT = 10002;
+
 // socket
 var io = require('socket.io')(server);
 io.on('connection', (socket)=>{
 
-  console.log("connect with = "+socket.id);
+  console.log('Connected => Socket ID ' + socket.id + ', User: ' + stringifyJson(socket.handshake.query));
 
   // check chat room
   socket.on("room", (room) => {
@@ -34,12 +38,21 @@ io.on('connection', (socket)=>{
   });
 
   // listen
-  socket.on('message', (msg)=>{
+  socket.on('chat_message', (msg)=>{
     console.log(msg);
-
     io.emit(msg.chatroom, msg);
   });
+
+  socket.on('disconnect', function () {
+    console.log('disconnect => ' + socket.id);
+    socket.removeAllListeners('disconnect');
+  });
+
 });
+
+function stringifyJson(data) {
+	return JSON.stringify(data);
+}
 
 /**
  * Listen on provided port, on all network interfaces.

@@ -24,7 +24,7 @@
                 }
 
                 // send by message
-                socket.emit('message', sendObj);
+                socket.emit('chat_message', sendObj);
                 $('#msg').val('')
 
                 return false;

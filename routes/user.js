@@ -26,4 +26,11 @@ router.get('/:userId', function(req, res, next) {
   });
 });
 
+router.get('/', function(req, res, next) {
+  connection.query("SELECT * FROM user_system ", function (err, result, fields) {
+    if (err) throw err;
+    res.json(result);
+  });
+});
+
 module.exports = router;

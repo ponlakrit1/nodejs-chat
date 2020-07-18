@@ -7,7 +7,8 @@ router.get('/:chatFrom', function(req, res, next) {
   var query = "SELECT * FROM chat_room r " +
               "RIGHT JOIN message m ON r.chat_no = m.chat_no " +
               "WHERE r.chat_from = '" + req.params.chatFrom + "' " +
-              "OR r.chat_to = '" + req.params.chatFrom + "' ";
+              "OR r.chat_to = '" + req.params.chatFrom + "' " +
+              "ORDER BY m.upd_datetime";
 
   connection.query(query, function (err, result, fields) {
     if (err) throw err;

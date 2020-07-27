@@ -59,4 +59,34 @@ router.post('/msg', function (req, res) {
   });
 });
 
+// Get chat room join last patient record
+router.get('/patient-last/:userId', function(req, res, next) {
+  var query = "SELECT c.chat_no, c.chat_name, c.patient_id_display, p.HN, p.phone, pr.date record_date, d.name as disease_name FROM chat_room c " +
+              "INNER JOIN patient p ON p.id = c.patient_id " +
+              "INNER JOIN patient_record pr ON pr.id = p.last_record_id " +
+              "INNER JOIN disease d ON d.id = pr.disease_id " +
+              "WHERE c.user_id = '" + req.params.userId + "' " +
+              "AND c.active_flag = 'Y' " +
+              "ORDER BY c.update_date DESC";
+
+  connection.query(query, function (err, result, fields) {
+    if (err) throw err;
+    res.json(result);
+  });
+});
+
+// Get record
+router.get('/patient-last/:uid/:pid', function(req, res, next) {
+  var query = "SELECT * FROM patient_record p " +
+              "WHERE p.user_id = '" + req.params.uid + "' " +
+              "AND p.patient_id = '" + req.params.pid + "' " +
+              "ORDER BY p.date DESC";
+
+  connection.query(query, function (err, result, fields) {
+    if (err) throw err;
+    res.json(result);
+  });
+});
+
+
 module.exports = router;

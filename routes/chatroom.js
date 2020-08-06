@@ -77,7 +77,8 @@ router.get('/patient-last/:userId', function(req, res, next) {
 
 // Get record
 router.get('/patient-last/:uid/:pid', function(req, res, next) {
-  var query = "SELECT * FROM patient_record p " +
+  var query = "SELECT d.name, p.s_text, p.o_text, p.a_text, p.p_text, p.cost, p.note, p.evaluate_score, p.evaluate_note, p.date FROM patient_record p " +
+              "INNER JOIN disease d ON d.id = p.disease_id " +
               "WHERE p.user_id = '" + req.params.uid + "' " +
               "AND p.patient_id = '" + req.params.pid + "' " +
               "ORDER BY p.date DESC";

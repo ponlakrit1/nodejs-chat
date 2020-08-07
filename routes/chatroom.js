@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var connection = require('../conn');
-// const { v4: uuidv4 } = require('uuid');
+const mysql = require('mysql');
 
 // Find chat room MED
 router.get('/med/:chatId', function(req, res, next) {
@@ -47,13 +47,14 @@ router.get('/msg/patient/:chatName', function(req, res, next) {
 
 // Send
 router.post('/msg', function (req, res) {
-  var query = "UPDATE chat_room SET " +
-              "message_data = '" + JSON.stringify(req.body.message_data) + "', " +
-              "update_date = NOW(), " +
-              "recent_message = '" + req.body.message_recent + "' " +
-              "WHERE chat_name = '" + req.body.chat_name + "' ";
+  let query = "UPDATE ?? SET " +
+              "?? = ?, " +
+              "?? = NOW(), " +
+              "?? = ? " +
+              "WHERE ?? = ? ";
+  let options = mysql.format(query, ["chat_room", "message_data", JSON.stringify(req.body.message_data), "update_date", "recent_message", req.body.message_recent, "chat_name", req.body.chat_name]);
 
-  connection.query(query, function(err, result) {
+  connection.query(options, function(err, result) {
     if (err) throw err;
     res.json(result);
   });
@@ -89,5 +90,28 @@ router.get('/patient-last/:uid/:pid', function(req, res, next) {
   });
 });
 
+// Get history
+router.get('/history/:pid', function(req, res, next) {
+  let query = "SELECT u1.title old_title, u1.firstname old_firstname, u1.lastname old_lastname, u2.title, u2.firstname, u2.lastname FROM chat_doctor_history c " +
+              "INNER JOIN `user` u1 ON u1.id = c.old_user_id " +
+              "INNER JOIN `user` u2 ON u2.id = c.new_user_id	 " +
+              "WHERE c.patient_id = '" + req.params.pid + "' " +
+              "AND c.	active_flag = 'Y' ";
+
+  let updateQuery = "UPDATE chat_doctor_history SET " +
+                    "active_flag = 'N' " +
+                    "WHERE patient_id = " + req.params.pid;
+
+  //select
+  connection.query(query, function (err, result, fields) {
+    if (err) throw err;
+    res.json(result);
+  });
+
+  //update
+  connection.query(updateQuery, function(err, result) {
+    if (err) throw err;
+  });
+});
 
 module.exports = router;

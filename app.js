@@ -23,9 +23,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // router
 app.use('/socket', socketRouter);
-app.use('/user', userRouter);
-app.use('/chatroom', chatnameRouter);
-app.use('/patient', patientRouter);
+app.use('/mobile/user', userRouter);
+app.use('/mobile/chatroom', chatnameRouter);
+app.use('/mobile/patient', patientRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

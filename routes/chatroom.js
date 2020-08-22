@@ -96,10 +96,10 @@ router.get('/history/:pid', function(req, res, next) {
               "INNER JOIN `user` u1 ON u1.id = c.old_user_id " +
               "INNER JOIN `user` u2 ON u2.id = c.new_user_id	 " +
               "WHERE c.patient_id = '" + req.params.pid + "' " +
-              "AND c.	active_flag = 'Y' ";
+              "AND c.	active_flag = 1 ";
 
   let updateQuery = "UPDATE chat_doctor_history SET " +
-                    "active_flag = 'N' " +
+                    "active_flag = 0 " +
                     "WHERE patient_id = " + req.params.pid;
 
   //select

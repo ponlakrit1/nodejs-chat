@@ -1,0 +1,11 @@
+### upload joints
+POST http://localhost:3000/mobile/patient/therapy/exercise
+content-type: application/json
+
+{
+    "tp_id": 7,
+    "joint": "test"
+}
+
+###
+GET http://localhost:3000/mobile/patient/joints/39
